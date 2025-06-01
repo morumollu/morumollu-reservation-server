@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>모루몰루 예약하기</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #fff0f5;
+      padding: 2rem;
+      color: #333;
+    }
+    h1 {
+      color: #d85d9d;
+      text-align: center;
+    }
+    form {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin: auto;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #d85d9d;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #c04b8c;
+    }
+  </style>
+</head>
+<body>
+  <h1>모루몰루 꽃다발 예약</h1>
+  <form id="reservationForm">
+    <input type="text" name="name" placeholder="이름" required />
+    <input type="text" name="phone" placeholder="연락처" required />
+    <input type="email" name="email" placeholder="이메일" required />
+    <input type="date" name="date" required />
+    <select name="time" required>
+      <option value="">예약 시간 선택</option>
+      <option value="10:00">10:00</option>
+      <option value="11:00">11:00</option>
+      <option value="12:00">12:00</option>
+      <option value="13:00">13:00</option>
+      <option value="14:00">14:00</option>
+      <option value="15:00">15:00</option>
+      <option value="16:00">16:00</option>
+      <option value="17:00">17:00</option>
+      <option value="18:00">18:00</option>
+      <option value="19:00">19:00</option>
+      <option value="20:00">20:00</option>
+    </select>
+    <textarea name="note" placeholder="요청사항 (선택)" rows="3"></textarea>
+    <button type="submit">예약하기</button>
+  </form>
+
+  <script>
+    document.getElementById('reservationForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const res = await fetch("https://morumollu-reservation.up.railway.app/reserve", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          alert("예약이 완료되었습니다!");
+          this.reset();
+        } else {
+          alert("예약 실패 ㅠㅠ 다시 시도해주세요.");
+        }
+      } catch (error) {
+        alert("서버 오류가 발생했어요.");
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>
